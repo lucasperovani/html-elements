@@ -1,4 +1,4 @@
-import { builder } from './builder';
+import Element from './element';
 
 const html_element_list = [
   // Headers
@@ -38,26 +38,27 @@ const html_element_list = [
 ]
 
 /**
- * Generate the HTML elements functions.
+ * Generate the HTML elements functions that creates an Element.
  *
  * @returns The HTML elements functions.
  */
-function generate_html_elements_function(): object {
-  const func_list = {};
+function generate_html_elements(): { class_list: object } {
+  const class_list = {};
 
   // For each element
   for (const el of html_element_list) {
-    // Build the function
-    const func = function (id, classes, content, extra) {
-      return builder(el.type, id, classes, content, extra, el.end);
+    // Create the function to create the class
+    const elementClass = function(id, classes, content, extra) {
+      return new Element(el.type, id, classes, content, extra, el.end);
     }
 
-    // Add the function to the list
-    func_list[el.type] = func;
+    // Add the Element to the list
+    class_list[el.type] = elementClass;
   }
-  return func_list;
+  return {class_list};
 }
 
 // Export functions
-const html_element_functions = generate_html_elements_function()
-export default html_element_functions;
+const html_element: { class_list: object } =
+  generate_html_elements();
+export default html_element.class_list;

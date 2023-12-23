@@ -1,3 +1,4 @@
+import builder from './builder';
 import Element from './element';
 
 const html_element_list = [
@@ -42,23 +43,29 @@ const html_element_list = [
  *
  * @returns The HTML elements functions.
  */
-function generate_html_elements(): { class_list: object } {
+function generate_html_elements(): { class_list: object, func_list: object } {
   const class_list = {};
+  const func_list = {};
 
   // For each element
   for (const el of html_element_list) {
     // Create the function to create the class
-    const elementClass = function(id, classes, content, extra) {
+    class_list[el.type] = function(id, classes, content, extra) {
       return new Element(el.type, id, classes, content, extra, el.end);
     }
 
-    // Add the Element to the list
-    class_list[el.type] = elementClass;
+    // Create the functions
+    func_list[el.type] = function(id, classes, content, extra) {
+      return builder(el.type, id, classes, content, extra, el.end);
+    }
   }
-  return {class_list};
+  return {class_list, func_list};
 }
 
 // Export functions
-const html_element: { class_list: object } =
+const html_element: { class_list: object, func_list } =
   generate_html_elements();
-export default html_element.class_list;
+export default {
+  classes: html_element.class_list,
+  functions: html_element.func_list,
+};

@@ -4,7 +4,7 @@ class Element {
   type: string;
   id: string;
   classes: string[];
-  content: Element[];
+  content: (Element | string)[];
   attributes: object;
   end: boolean;
 
@@ -87,7 +87,7 @@ class Element {
    *
    * @returns The content of the element.
    */
-  getContent(): Element[] {
+  getContent(): (Element | string)[] {
     return this.content;
   }
 
@@ -105,7 +105,7 @@ class Element {
    *
    * @param content - The content to append to the element.
    */
-  appendContent(content: Element): void {
+  appendContent(content: Element|string): void {
     this.content.push(content);
   }
 
@@ -114,7 +114,7 @@ class Element {
    *
    * @param content - The contents to append to the element.
    */
-  appendContents(content: Element[]): void {
+  appendContents(content: (Element | string)[]): void {
     this.content = this.content.concat(content);
   }
 
@@ -164,7 +164,8 @@ class Element {
     let content = '';
 
     for (const element of this.content) {
-      content += element.toHTML();
+      if (typeof element === 'string') content += element;
+      else content += element.toHTML();
     }
 
     return builder(

@@ -1,4 +1,5 @@
-import { builder } from './builder';
+import builder from './builder';
+import Element from './element';
 
 const html_element_list = [
   // Headers
@@ -8,6 +9,8 @@ const html_element_list = [
   {type: 'h4', end: true},
   {type: 'h5', end: true},
   {type: 'h6', end: true},
+
+  {type: 'hr', end: false},
 
   // Paragraph
   {type: 'p', end: true},
@@ -37,27 +40,49 @@ const html_element_list = [
   {type: 'a', end: true},
 ]
 
+type HTML_Classes_Type = {
+  classes: {
+    [key: string]: (
+      id?: string,
+      classes?: string[],
+      content?: (Element | string)[],
+      attributes?: object
+    ) => Element,
+  },
+  functions: {
+    [key: string]: (
+      id?: string,
+      classes?: string[],
+      content?: string,
+      attributes?: object
+    ) => string,
+  },
+};
+
 /**
- * Generate the HTML elements functions.
+ * Generate the HTML elements functions that creates an Element.
  *
  * @returns The HTML elements functions.
  */
-function generate_html_elements_function(): object {
+function generate_html_elements(): HTML_Classes_Type {
+  const class_list = {};
   const func_list = {};
 
   // For each element
   for (const el of html_element_list) {
-    // Build the function
-    const func = function (id, classes, content, extra) {
-      return builder(el.type, id, classes, content, extra, el.end);
+    // Create the function to create the class
+    class_list[el.type] = function(id, classes, content, attributes) {
+      return new Element(el.type, id, classes, content, attributes, el.end);
     }
 
-    // Add the function to the list
-    func_list[el.type] = func;
+    // Create the functions
+    func_list[el.type] = function(id, classes, content, attributes) {
+      return builder(el.type, id, classes, content, attributes, el.end);
+    }
   }
-  return func_list;
+  return {classes: class_list, functions: func_list};
 }
 
 // Export functions
-const html_element_functions = generate_html_elements_function()
-export default html_element_functions;
+const html_element: HTML_Classes_Type = generate_html_elements();
+export default html_element;

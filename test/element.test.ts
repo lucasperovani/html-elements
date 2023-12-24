@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import elements from '../src/index';
+import elements from '../dist/index';
 const { div, h5, hr } = elements.classes;
 
 

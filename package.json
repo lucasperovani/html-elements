@@ -4,7 +4,7 @@
   "description": "A lightweight javascript/typescript library to improve read and write of code generated HTML strings.",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -p .",
     "linter": "eslint --ext .ts src",
     "test": "vitest"
   },

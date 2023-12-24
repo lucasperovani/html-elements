@@ -12,15 +12,15 @@
  * @return The HTML element string.
  */
 function builder(
-  type: string, id: string, classes: string[],
+  type: string, id = '', classes: string[] = [],
   content = '', attributes = {}, end = true
 ): string {
   const classesString = classes.join(' ')
-  let html = '<' + type + ' '
+  let html = '<' + type
 
   // ID and classes
-  html += id.length > 0 ? 'id="' + id + '" ' : ''
-  html += classesString.length > 0 ? 'class="' + classesString + '"' : ''
+  html += id.length > 0 ? ' id="' + id + '"' : ''
+  html += classesString.length > 0 ? ' class="' + classesString + '"' : ''
 
   Object.keys(attributes).forEach((key) => {
     html += ' ' + key + '="' + attributes[key] + '"'

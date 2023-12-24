@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "linter": "eslint --ext .ts src",
-    "test": "test"
+    "test": "vitest"
   },
   "keywords": [
     "HTML",

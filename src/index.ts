@@ -3,57 +3,57 @@ import Element from './element';
 
 const html_element_list = [
   // Headers
-  {type: 'h1', end: true},
-  {type: 'h2', end: true},
-  {type: 'h3', end: true},
-  {type: 'h4', end: true},
-  {type: 'h5', end: true},
-  {type: 'h6', end: true},
+  {tagName: 'h1', end: true},
+  {tagName: 'h2', end: true},
+  {tagName: 'h3', end: true},
+  {tagName: 'h4', end: true},
+  {tagName: 'h5', end: true},
+  {tagName: 'h6', end: true},
 
-  {type: 'hr', end: false},
+  {tagName: 'hr', end: false},
 
   // Paragraph
-  {type: 'p', end: true},
+  {tagName: 'p', end: true},
 
   // Span
-  {type: 'span', end: true},
+  {tagName: 'span', end: true},
 
   // Div
-  {type: 'div', end: true},
+  {tagName: 'div', end: true},
 
   // Section
-  {type: 'section', end: true},
+  {tagName: 'section', end: true},
 
   // Article
-  {type: 'article', end: true},
+  {tagName: 'article', end: true},
 
   // Aside
-  {type: 'aside', end: true},
+  {tagName: 'aside', end: true},
 
   // Footer
-  {type: 'footer', end: true},
+  {tagName: 'footer', end: true},
 
   // Header
-  {type: 'header', end: true},
+  {tagName: 'header', end: true},
 
   // Link
-  {type: 'a', end: true},
+  {tagName: 'a', end: true},
 ]
 
 type HTML_Classes_Type = {
   classes: {
     [key: string]: (
-      id?: string,
+      tagName?: string,
       classes?: string[],
-      content?: (Element | string)[],
+      innerHTML?: (Element | string)[],
       attributes?: object
     ) => Element,
   },
   functions: {
     [key: string]: (
-      id?: string,
+      tagName?: string,
       classes?: string[],
-      content?: string,
+      innerHTML?: string,
       attributes?: object
     ) => string,
   },
@@ -71,13 +71,13 @@ function generate_html_elements(): HTML_Classes_Type {
   // For each element
   for (const el of html_element_list) {
     // Create the function to create the class
-    class_list[el.type] = function(id, classes, content, attributes) {
-      return new Element(el.type, id, classes, content, attributes, el.end);
+    class_list[el.tagName] = function(id, classes, content, attributes) {
+      return new Element(el.tagName, id, classes, content, attributes, el.end);
     }
 
     // Create the functions
-    func_list[el.type] = function(id, classes, content, attributes) {
-      return builder(el.type, id, classes, content, attributes, el.end);
+    func_list[el.tagName] = function(id, classes, content, attributes) {
+      return builder(el.tagName, id, classes, content, attributes, el.end);
     }
   }
   return {classes: class_list, functions: func_list};

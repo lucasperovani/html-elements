@@ -1,31 +1,32 @@
 import builder from './builder';
 
 class Element {
-  type: string;
+  tagName: string;
   id: string;
   classes: string[];
-  content: (Element | string)[];
+  innerHTML: (Element | string)[];
   attributes: object;
-  end: boolean;
+  shouldClose: boolean;
 
   constructor(
-    type, id, classes = [], content = [], attributes = {}, end = true,
+    tagName, id, classes = [], innerHTML = [], attributes = {},
+    shouldClose = true,
   ) {
-    this.type = type;
+    this.tagName = tagName;
     this.id = id;
     this.classes = classes;
-    this.content = content;
+    this.innerHTML = innerHTML;
     this.attributes = attributes;
-    this.end = end;
+    this.shouldClose = shouldClose;
   }
 
   /**
-   * Get the type of the element.
+   * Get the tag name of the element.
    *
-   * @returns The type of the element.
+   * @returns The tag name of the element.
    */
-  getType(): string {
-    return this.type;
+  getTagName(): string {
+    return this.tagName;
   }
 
   /**
@@ -83,39 +84,39 @@ class Element {
   }
 
   /**
-   * Get the content of the element.
+   * Get the inner HTML of the element.
    *
-   * @returns The content of the element.
+   * @returns The inner HTML of the element.
    */
-  getContent(): (Element | string)[] {
-    return this.content;
+  getInnerHTML(): (Element | string)[] {
+    return this.innerHTML;
   }
 
   /**
-   * Set the content of the element.
+   * Set the inner HTML of the element.
    *
-   * @param content - The content of the element.
+   * @param innerHTML - The inner HTML of the element.
    */
-  setContent(content: Element[]): void {
-    this.content = content;
+  setContent(innerHTML: Element[]): void {
+    this.innerHTML = innerHTML;
   }
 
   /**
-   * Append a content to the element.
+   * Append a inner HTML to the element.
    *
-   * @param content - The content to append to the element.
+   * @param innerHTML - The inner HTML to append to the element.
    */
-  appendContent(content: Element|string): void {
-    this.content.push(content);
+  appendContent(innerHTML: Element|string): void {
+    this.innerHTML.push(innerHTML);
   }
 
   /**
-   * Append contents to the element.
+   * Append inner HTML to the element.
    *
-   * @param content - The contents to append to the element.
+   * @param innerHTML - The inner HTML to append to the element.
    */
-  appendContents(content: (Element | string)[]): void {
-    this.content = this.content.concat(content);
+  appendContents(innerHTML: (Element | string)[]): void {
+    this.innerHTML = this.innerHTML.concat(innerHTML);
   }
 
   /**
@@ -161,15 +162,16 @@ class Element {
    * @returns The HTML string.
    */
   toHTML(): string {
-    let content = '';
+    let innerHTML = '';
 
-    for (const element of this.content) {
-      if (typeof element === 'string') content += element;
-      else content += element.toHTML();
+    for (const element of this.innerHTML) {
+      if (typeof element === 'string') innerHTML += element;
+      else innerHTML += element.toHTML();
     }
 
     return builder(
-      this.type, this.id, this.classes, content, this.attributes, this.end,
+      this.tagName, this.id, this.classes, innerHTML, this.attributes,
+      this.shouldClose,
     )
   }
 }
